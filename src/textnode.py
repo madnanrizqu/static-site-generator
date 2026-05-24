@@ -11,13 +11,10 @@ class TextType(Enum):
 
 
 class TextNode:
-    def __init__(self, text, text_type, url):
+    def __init__(self, text, text_type, url=None):
         self.text = text
         self.text_type = text_type
-        self.url = None
-
-        if text_type == TextType.LINK and url:
-            self.url = url
+        self.url = url
 
     def __eq__(self, value):
         return (
