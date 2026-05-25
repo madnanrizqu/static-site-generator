@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode
+from htmlnode import HTMLNode, LeafNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -50,6 +50,38 @@ class TestHTMLNode(unittest.TestCase):
         self.assertEqual(
             repr(node),
             "HTMLNode(p, Lorem ipsum color damet, children: [HTMLNode(span, sitta, children: None, None), HTMLNode(span, lemma, children: None, None)], {'style': 'background-color: black; color: red; font-size: 24px'})",
+        )
+
+
+class TestLeafNode(unittest.TestCase):
+    def test_basic_to_html_p(self):
+        node = LeafNode("p", "Hello, world!")
+        self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
+
+    def test_complete_to_html_button(self):
+        node = LeafNode(
+            "button",
+            "Lorem ipsum color damet",
+            None,
+            {"style": "background-color: black; color: red; font-size: 24px"},
+        )
+
+        self.assertEqual(
+            node.to_html(),
+            '<button style="background-color: black; color: red; font-size: 24px">Lorem ipsum color damet</button>',
+        )
+
+    def test_repr(self):
+        node = LeafNode(
+            "button",
+            "Lorem ipsum color damet",
+            None,
+            {"style": "background-color: black; color: red; font-size: 24px"},
+        )
+
+        self.assertEqual(
+            repr(node),
+            "LeafNode(button, Lorem ipsum color damet, children: None, {'style': 'background-color: black; color: red; font-size: 24px'})",
         )
 
 
