@@ -1,5 +1,5 @@
 import unittest
-from htmlnode import HTMLNode, LeafNode
+from htmlnode import HTMLNode, LeafNode, ParentNode
 
 
 class TestHTMLNode(unittest.TestCase):
@@ -82,6 +82,61 @@ class TestLeafNode(unittest.TestCase):
         self.assertEqual(
             repr(node),
             "LeafNode(button, Lorem ipsum color damet, children: None, {'style': 'background-color: black; color: red; font-size: 24px'})",
+        )
+
+
+class TestParentNode(unittest.TestCase):
+    def test_to_html_with_children(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(parent_node.to_html(), "<div><span>child</span></div>")
+
+    def test_to_html_with_grandchildren(self):
+        grandchild_node = LeafNode("b", "grandchild")
+        child_node = ParentNode("span", [grandchild_node])
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            parent_node.to_html(), "<div><span><b>grandchild</b></span></div>"
+        )
+
+    def test_to_html_with_children_no_tag_leaf(self):
+        child_node = LeafNode("span", "child")
+        child_node1 = LeafNode(None, "child no tag")
+        child_node2 = LeafNode("b", "child2")
+        child_node3 = LeafNode(None, "child no tag 2")
+        parent_node = ParentNode(
+            "div", [child_node, child_node1, child_node2, child_node3]
+        )
+        self.assertEqual(
+            parent_node.to_html(),
+            "<div><span>child</span>child no tag<b>child2</b>child no tag 2</div>",
+        )
+
+    def test_to_html_with_props(self):
+        child_prop = {"style": "background-color: white; color: blue; font-size: 20px"}
+        child_node = LeafNode("span", "child", None, child_prop)
+        parent_prop = {"style": "background-color: black; color: red; font-size: 24px"}
+        parent_node = ParentNode("div", [child_node], parent_prop)
+        self.assertEqual(
+            parent_node.to_html(),
+            '<div style="background-color: black; color: red; font-size: 24px"><span style="background-color: white; color: blue; font-size: 20px">child</span></div>',
+        )
+
+    def test_to_html_no_children(self):
+        with self.assertRaises(ValueError):
+            ParentNode("div", None).to_html()
+
+    def test_to_html_no_tag(self):
+        child_node = LeafNode("span", "child")
+        with self.assertRaises(ValueError):
+            ParentNode(None, [child_node]).to_html()
+
+    def test_repr(self):
+        child_node = LeafNode("span", "child")
+        parent_node = ParentNode("div", [child_node])
+        self.assertEqual(
+            repr(parent_node),
+            "ParentNode(div, children: [LeafNode(span, child, children: None, None)], None)",
         )
 
 
