@@ -66,7 +66,6 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode(
             "button",
             "Lorem ipsum color damet",
-            None,
             {"style": "background-color: black; color: red; font-size: 24px"},
         )
 
@@ -79,7 +78,6 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode(
             "button",
             "Lorem ipsum color damet",
-            None,
             {"style": "background-color: black; color: red; font-size: 24px"},
         )
 
@@ -118,7 +116,7 @@ class TestParentNode(unittest.TestCase):
 
     def test_to_html_with_props(self):
         child_prop = {"style": "background-color: white; color: blue; font-size: 20px"}
-        child_node = LeafNode("span", "child", None, child_prop)
+        child_node = LeafNode("span", "child", child_prop)
         parent_prop = {"style": "background-color: black; color: red; font-size: 24px"}
         parent_node = ParentNode("div", [child_node], parent_prop)
         self.assertEqual(
