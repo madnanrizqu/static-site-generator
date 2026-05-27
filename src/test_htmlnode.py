@@ -58,6 +58,10 @@ class TestLeafNode(unittest.TestCase):
         node = LeafNode("p", "Hello, world!")
         self.assertEqual(node.to_html(), "<p>Hello, world!</p>")
 
+    def test_no_tag_to_html_p(self):
+        node = LeafNode(None, "Hello, world!")
+        self.assertEqual(node.to_html(), "Hello, world!")
+
     def test_complete_to_html_button(self):
         node = LeafNode(
             "button",
