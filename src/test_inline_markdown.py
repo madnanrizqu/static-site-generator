@@ -5,6 +5,7 @@ from inline_markdown import (
     extract_markdown_links,
     split_nodes_link,
     split_nodes_image,
+    text_to_textnodes,
 )
 from textnode import TextNode, TextType
 
@@ -402,6 +403,40 @@ class TestSplitNodesImages(unittest.TestCase):
                 TextNode("image", TextType.IMAGE, "https://i.imgur.com/zjjcJKZ.png"),
             ],
         )
+
+
+class TestTextToTestNode(unittest.TestCase):
+    def test_all(self):
+        text = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        self.assertListEqual(
+            text_to_textnodes(text),
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode(
+                    "obi wan image",
+                    TextType.IMAGE,
+                    "https://i.imgur.com/fJRm4Vk.jpeg",
+                ),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ],
+        )
+
+    def test_no_conversion(self):
+        text = "Hello world"
+        self.assertListEqual(
+            text_to_textnodes(text), [TextNode("Hello world", TextType.TEXT)]
+        )
+
+    def test_empty_string(self):
+        text = ""
+        self.assertListEqual(text_to_textnodes(text), [])
 
 
 if __name__ == "__main__":
