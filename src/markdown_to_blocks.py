@@ -17,44 +17,26 @@ class BlockType(Enum):
 
 
 def block_to_block_type(block: str) -> BlockType:
-    if re.match(r"^#{1,6} .+", block):
-        return BlockType.HEADING
-    if block.startswith("```\n") and block.endswith("```"):
-        return BlockType.CODE
-    if block.startswith("> ") or block.startswith(">"):
-        all_lines = block.split("\n")
-        is_valid = True
-        for line in all_lines:
-            if line == "" or line.startswith("> ") or line.startswith(">"):
-                continue
-            else:
-                is_valid = False
-                break
+    lines = block.split("\n")
 
-        if is_valid:
+    if len(lines) == 1 and re.match(r"^#{1,6} .+", block):
+        return BlockType.HEADING
+    if len(lines) > 1 and block.startswith("```") and block.endswith("```"):
+        return BlockType.CODE
+    if block.startswith(">"):
+        if all(line.startswith(">") for line in lines):
             return BlockType.QUOTE
     if block.startswith("- "):
-        all_lines = block.split("\n")
-        is_valid = True
-        for line in all_lines:
-            if line == "" or line.startswith("- "):
-                continue
-            else:
-                is_valid = False
-                break
-
-        if is_valid:
+        if all(line.startswith("- ") for line in lines):
             return BlockType.UNORDERED_LIST
     if block.startswith("1. "):
         current_num = 1
-        all_lines = block.split("\n")
         is_valid = True
-        for line in all_lines:
-            if line == "" or line.startswith(f"{current_num}. "):
-                current_num += 1
-            else:
+        for line in lines:
+            if not line.startswith(f"{current_num}. "):
                 is_valid = False
                 break
+            current_num += 1
 
         if is_valid:
             return BlockType.ORDERED_LIST

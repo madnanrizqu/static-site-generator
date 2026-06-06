@@ -112,84 +112,80 @@ class TestBlockToBlockType(unittest.TestCase):
         block = '```\nprint("Hello")\nprint("World")\n```'
         self.assertEqual(block_to_block_type(block), BlockType.CODE)
 
-    def test_multiline_code_no_leading_space(self):
-        block = '```print("Hello")\nprint("World")\n```'
-        self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
-
     def test_multiline_code_no_trailing_ticks(self):
         block = '```\nprint("Hello")\nprint("World")'
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_quote_block_with_space(self):
-        block = "> I'am\n" + "> Learning\n" + "> In lines\n"
+        block = "> I'am\n" + "> Learning\n" + "> In lines"
         self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
 
     def test_quote_block_some_no_space(self):
-        block = ">I'am\n" + "> Learning\n" + "> In lines\n"
+        block = ">I'am\n" + "> Learning\n" + "> In lines"
         self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
 
     def test_quote_block_all_no_space(self):
-        block = ">I'am\n" + ">Learning\n" + ">In lines\n"
+        block = ">I'am\n" + ">Learning\n" + ">In lines"
         self.assertEqual(block_to_block_type(block), BlockType.QUOTE)
 
     def test_quote_block_first_no_proper_start(self):
-        block = "I'am\n" + "> Learning\n" + "> In lines\n"
+        block = "I'am\n" + "> Learning\n" + "> In lines"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_quote_block_some_no_proper_start(self):
-        block = "> I'am\n" + "Learning\n" + "> In lines\n"
+        block = "> I'am\n" + "Learning\n" + "> In lines"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_unordered_list(self):
-        block = "- Apple\n" + "- Banana\n" + "- Orange\n"
+        block = "- Apple\n" + "- Banana\n" + "- Orange"
         self.assertEqual(block_to_block_type(block), BlockType.UNORDERED_LIST)
 
     def test_unordered_list_single_item(self):
-        block = "- Apple\n"
+        block = "- Apple"
         self.assertEqual(block_to_block_type(block), BlockType.UNORDERED_LIST)
 
     def test_unordered_list_no_space_on_first(self):
-        block = "-Apple\n" + "- Banana\n" + "- Orange\n"
+        block = "-Apple\n" + "- Banana\n" + "- Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_unordered_list_no_space_on_other(self):
-        block = "-Apple\n" + "- Banana\n" + "-Orange\n"
+        block = "-Apple\n" + "- Banana\n" + "-Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_unordered_list_no_hyphen_on_first(self):
-        block = "Apple\n" + "- Banana\n" + "- Orange\n"
+        block = "Apple\n" + "- Banana\n" + "- Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_unordered_list_no_hyphen_on_other(self):
-        block = "- Apple\n" + "Banana\n" + "- Orange\n"
+        block = "- Apple\n" + "Banana\n" + "- Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_ordered_list(self):
-        block = "1. Apple\n" + "2. Banana\n" + "3. Orange\n"
+        block = "1. Apple\n" + "2. Banana\n" + "3. Orange"
         self.assertEqual(block_to_block_type(block), BlockType.ORDERED_LIST)
 
     def test_ordered_list_no_start_with_one(self):
-        block = "0. Apple\n" + "1. Banana\n" + "2. Orange\n"
+        block = "0. Apple\n" + "1. Banana\n" + "2. Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_ordered_list_invalid_increment(self):
-        block = "1. Apple\n" + "5. Banana\n" + "3. Orange\n"
+        block = "1. Apple\n" + "5. Banana\n" + "3. Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_ordered_list_no_space_on_first(self):
-        block = "1.Apple\n" + "2. Banana\n" + "3. Orange\n"
+        block = "1.Apple\n" + "2. Banana\n" + "3. Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_ordered_list_no_space_on_other(self):
-        block = "1. Apple\n" + "2.Banana\n" + "3. Orange\n"
+        block = "1. Apple\n" + "2.Banana\n" + "3. Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_ordered_list_no_dot_on_first(self):
-        block = "1 Apple\n" + "2. Banana\n" + "3. Orange\n"
+        block = "1 Apple\n" + "2. Banana\n" + "3. Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
     def test_ordered_list_no_dot_on_other(self):
-        block = "1. Apple\n" + "2 Banana\n" + "3. Orange\n"
+        block = "1. Apple\n" + "2 Banana\n" + "3. Orange"
         self.assertEqual(block_to_block_type(block), BlockType.PARAGRAPH)
 
 
