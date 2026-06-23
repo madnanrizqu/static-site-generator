@@ -3,7 +3,7 @@ import shutil
 import sys
 from pathlib import Path
 from copystatic import copy_recursive
-from page import generate_page
+from page import generate_pages_recursive
 
 
 def main():
@@ -41,13 +41,8 @@ def main():
         print("Error copying to public:", e)
         sys.exit(7)
 
-    index_path = os.path.join(content_path, "index.md")
-    if not os.path.isfile(index_path):
-        print("index page content not found:", index_path)
-        sys.exit(8)
-    dest_path = os.path.join(public_path, "index.html")
     try:
-        generate_page(index_path, template_path, dest_path)
+        generate_pages_recursive(content_path, template_path, public_path)
     except Exception as e:
         print("Error generating page:", e)
         sys.exit(9)

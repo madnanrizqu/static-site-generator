@@ -1,5 +1,5 @@
 from markdown_to_blocks import markdown_to_html_node
-
+import os
 
 def extract_title(markdown: str) -> str:
     if "# " not in markdown:
@@ -33,6 +33,20 @@ def generate_page(from_path: str, template_path: str, dest_path: str):
 
     content = content.replace("{{ Title }}", title)
     content = content.replace("{{ Content }}", html_string)
-
-    with open(dest_path, "w") as file:
+    
+    with open(dest_path.replace(".md", ".html"), "w") as file:
         file.write(content)
+
+def generate_pages_recursive(dir_path_content: str, template_path: str, dest_dir_path: str):
+    for child in os.listdir(dir_path_content):
+        from_path = os.path.join(dir_path_content, child)
+        dest_path = os.path.join(dest_dir_path, child)
+
+        if os.path.isdir(from_path):
+            print("[generate_pages_recursive] detected a dir, calling function for: ", from_path)
+            if not os.path.exists(dest_path):
+                os.mkdir(dest_path)
+            generate_pages_recursive(from_path, template_path, dest_path)
+        else:
+            print("[generate_pages_recursive] detected a file, generating page for: ", from_path)
+            generate_page(from_path, template_path, dest_path)
