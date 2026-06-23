@@ -7,8 +7,12 @@ from page import generate_pages_recursive
 
 
 def main():
+    web_base_path = "/"
+    if len(sys.argv) > 1:
+        web_base_path = sys.argv[1]
+        
     root_path = find_project_root()
-    public_path = os.path.join(root_path, "public")
+    public_path = os.path.join(root_path, "docs")
     static_path = os.path.join(root_path, "static")
     content_path = os.path.join(root_path, "content")
     template_path = os.path.join(root_path, "template.html")
@@ -42,7 +46,7 @@ def main():
         sys.exit(7)
 
     try:
-        generate_pages_recursive(content_path, template_path, public_path)
+        generate_pages_recursive(content_path, template_path, public_path, web_base_path)
     except Exception as e:
         print("Error generating page:", e)
         sys.exit(9)
